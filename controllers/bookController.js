@@ -48,7 +48,7 @@ const addBook = async (req, res) => {
   
   try {
     const book = await Book.create(req.body);
-    return res.status(201).json({ message: 'Book added successfully', book });
+    return res.status(201).json({ message: 'Book added successfully', book:{book} });
     // TODO: Implement logic to create and add a new book to the database
     // Use Book.create() to create a new book
     // Example response when book is added successfully:
@@ -91,7 +91,7 @@ const deleteBook = async (req, res) => {
     if(!deletedBook){
       return res.status(404).json({ message: 'Book not found' });
     }
-    return res.status(200).json({ message: 'Book deleted successfully', book: deletedBook });
+    return res.status(200).json({ message: 'Book deleted successfully', book:{deletedBook} });
     // TODO: Implement logic to delete a book by ID from the database
     // Use Book.findByIdAndDelete(bookId) to delete the book
     // Example response when book is deleted successfully:
