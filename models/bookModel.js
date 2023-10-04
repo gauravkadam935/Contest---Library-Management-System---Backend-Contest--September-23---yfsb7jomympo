@@ -1,4 +1,5 @@
 // Define the Book Schema
+const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({
   // 1)   {
   // // Define the 'title' field
