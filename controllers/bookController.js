@@ -2,6 +2,11 @@ const Book = require('../models/bookModel');
 
 const getAllBooks = async (req, res) => {
   try {
+    const books = await Book.find();
+    if(books.length==0){
+      return res.status(404).json({ message: 'No books found' });
+    }
+    return res.status(200).json(books);
     // TODO: Implement logic to fetch all books from the database
     // Example response when books are found:
     // res.status(200).json(books);
@@ -12,12 +17,18 @@ const getAllBooks = async (req, res) => {
       .status(500)
       .json({ message: 'Internal server error', error: error.message });
   }
+  
 };
 
 const getBookById = async (req, res) => {
   const bookId = req.params.id;
 
   try {
+    const book = Book.findById(bookId);
+    if(!book){
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    return res.status(200).json(book);
     // TODO: Implement logic to fetch a book by ID from the database
     // Use Book.findById(bookId) to retrieve a book
     // Example response when book is found:
@@ -34,8 +45,10 @@ const getBookById = async (req, res) => {
 const addBook = async (req, res) => {
   const { title, author, ISBN, publishedYear, genre, copiesAvailable } =
     req.body;
-
+  
   try {
+    const book = await Book.create(req.body);
+    return res.status(201).json({ message: 'Book added successfully', book });
     // TODO: Implement logic to create and add a new book to the database
     // Use Book.create() to create a new book
     // Example response when book is added successfully:
@@ -52,6 +65,11 @@ const updateBook = async (req, res) => {
   const updateInfo = req.body;
 
   try {
+    const updatedBook = await Book.findByIdAndUpdate(bookId, updateInfo, { new: true });
+    if (!updatedBook) {
+      return res.status(404).json({ error: 'Book not found.' });
+    }
+    return res.status(200).json({ message: 'Book updated successfully', book: updatedBook });
     // TODO: Implement logic to update a book by ID in the database
     // Use Book.findByIdAndUpdate(bookId, updateInfo, { new: true }) to update the book
     // Example response when book is updated successfully:
@@ -69,6 +87,11 @@ const deleteBook = async (req, res) => {
   const bookId = req.params.id;
 
   try {
+    const deletedBook= Book.findByIdAndDelete(bookId);
+    if(!deletedBook){
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    return res.status(200).json({ message: 'Book deleted successfully', book: deletedBook });
     // TODO: Implement logic to delete a book by ID from the database
     // Use Book.findByIdAndDelete(bookId) to delete the book
     // Example response when book is deleted successfully:
