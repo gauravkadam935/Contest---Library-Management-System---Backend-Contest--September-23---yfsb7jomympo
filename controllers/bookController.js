@@ -25,12 +25,12 @@ const getBookById = async (req, res) => {
   const bookId = req.params.id;
 
   try {
-    const book = Book.findById(bookId);
+    const book = await Book.findById(bookId);
     if(!book){
       return res.status(404).json({ message: 'Book not found' });
     }
-    const newBook = {_id:bookId,...book};
-    return res.status(200).json(newBook);
+    
+    return res.status(200).json(book);
     // TODO: Implement logic to fetch a book by ID from the database
     // Use Book.findById(bookId) to retrieve a book
     // Example response when book is found:
@@ -89,12 +89,12 @@ const deleteBook = async (req, res) => {
   const bookId = req.params.id;
 
   try {
-    const deletedBook= Book.findByIdAndDelete(bookId);
-    if(!deletedBook){
+    const book = await Book.findById(bookId);
+    if(!book){
       return res.status(404).json({ message: 'Book not found' });
     }
-    const book = {_id:bookId,...deletedBook}
-    return res.status(200).json({ message: 'Book deleted successfully', book:book });
+    await Book.findByIdAndDelete(bookId);   
+    return res.status(200).json({ message: 'Book deleted successfully', book});
     // TODO: Implement logic to delete a book by ID from the database
     // Use Book.findByIdAndDelete(bookId) to delete the book
     // Example response when book is deleted successfully:
