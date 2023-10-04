@@ -3,7 +3,7 @@ const Book = require('../models/bookModel');
 const getAllBooks = async (req, res) => {
   try {
     const books = await Book.find();
-    if(books.length==0){
+    if(books==null){
       return res.status(404).json({ message: 'No books found' });
     }
     return res.status(200).json(books);
